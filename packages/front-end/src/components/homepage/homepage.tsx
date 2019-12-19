@@ -12,7 +12,7 @@ export default class Homepage extends React.Component<IProps> {
   public render() {
     return (
       <section className="homepage">
-        <h1 className="homepage__text">Hello {this.props.name}! 111</h1>
+        <h1 className="homepage__text">Hello {this.props.name}! ss</h1>
         <button onClick={this.handleClick}>Click here</button>
       </section>
     );

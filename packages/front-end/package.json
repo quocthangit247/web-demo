@@ -5,8 +5,9 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "start:dev": "webpack --config webpack.config.js --mode development ",
-    "start": "webpack-dev-server --progress",
+    "start:dev": "webpack --config webpack.config.js --mode development",
+    "start": "webpack-dev-server --mode development --color",
+    "dev-server": "webpack-dev-server",
     "build": "webpack --config webpack.config.js --mode production"
   },
   "main": "dist/index.js",
@@ -38,6 +39,7 @@
     "typescript": "^3.7.3",
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-dev-server": "^3.10.1",
+    "html-webpack-plugin": "^3.2.0"
   }
 }
