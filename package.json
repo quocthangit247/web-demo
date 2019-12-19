@@ -1,0 +1,24 @@
+{
+  "name": "web-demo",
+  "private": true,
+  "scripts": {
+    "format": "lerna run --stream format",
+    "lint": "lerna run  --stream lint",
+    "watch": "lerna run watch",
+    "start-common:dev": "lerna run --scope=*-common --stream start:dev",
+    "start:dev": "lerna run --stream --ignore=*-core build && lerna run --parallel --ignore=*-core start:dev"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "lerna": "3.19.0",
+    "nodemon": "2.0.2",
+    "prettier": "1.19.1",
+    "tslint": "^5.20.1",
+    "tslint-config-airbnb": "5.11.2",
+    "tslint-config-prettier": "1.18.0"
+  }
+}

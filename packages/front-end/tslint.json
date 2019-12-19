@@ -1,0 +1,20 @@
+{
+  "extends": ["tslint-config-airbnb", "tslint-config-prettier"],
+  "rules": {
+    "quotemark": [true, "single", "jsx-double", "backtick"],
+    "max-line-length": [
+      true,
+      {
+        "limit": 120
+      }
+    ],
+    "ordered-imports": [
+      true,
+      {
+        "module-source-path": "full",
+        "grouped-imports": false
+      }
+    ],
+    "import-name": [true, null, {}, null, { "ignoreExternalModule": false, "case": "any-case" }]
+  }
+}
