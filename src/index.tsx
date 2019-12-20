@@ -5,9 +5,4 @@ import 'regenerator-runtime/runtime';
 import App from './App';
 import './styles/index.scss';
 
-ReactDOM.render(
-  <div>
-    <App />
-  </div>,
-  document.getElementById('app')
-);
+ReactDOM.render(<App />, document.getElementById('app'));

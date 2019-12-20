@@ -3,7 +3,7 @@ import Homepage from './components/homepage/homepage';
 
 const App = () => (
   <React.Fragment>
-    <Homepage name="world" />
+    <Homepage />
   </React.Fragment>
 );
 

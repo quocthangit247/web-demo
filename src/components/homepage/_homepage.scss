@@ -1,0 +1,36 @@
+.homepage {
+  text-align: center;
+  &__text {
+    font-size: 2rem;
+    color: green;
+  }
+
+  &__progress {
+    position: relative;
+    margin: 10px auto;
+    width: 50%;
+    background-color: grey;
+  }
+
+  &__percentage {
+    width: 10%;
+    height: 45px;
+    background-color: green;
+  }
+
+  &__control {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  &__button {
+    width: 5%;
+    margin: 0 10px;
+  }
+
+  &__value {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+  }
+}
