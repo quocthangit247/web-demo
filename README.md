@@ -1,6 +1,7 @@
 # web-demo
 
-## Before start in command line: yarn or npm &nbsp;
+## First of all in command line:
+  - yarn or npm &nbsp;
 ## Start Project: 
   - local(development): yarn start or npm start
   - build(product): yarn build or npm run build
