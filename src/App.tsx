@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Homepage from './components/homepage/homepage';
+import Homepage from './components/homepage/Homepage';
 
 const App = () => (
   <React.Fragment>

@@ -13,13 +13,16 @@ interface IState {
 }
 
 export default class Homepage extends React.Component<IProps, IState> {
-  state = {
-    bars: [],
-    buttons: [],
-    limit: 0,
-    values: [],
-    selected: 0,
-  };
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      bars: [],
+      buttons: [],
+      limit: 0,
+      values: [],
+      selected: 0,
+    };
+  }
 
   async componentDidMount() {
     const data = await ApiService.getData();
@@ -42,7 +45,7 @@ export default class Homepage extends React.Component<IProps, IState> {
     }
 
     return (
-      <>
+      <div key={uuidv4()}>
         <div className="homepage__progress" key={uuidv4()}>
           <div className="homepage__value"> {value}</div>
           <div
@@ -50,7 +53,7 @@ export default class Homepage extends React.Component<IProps, IState> {
             style={{ width: `${width}%` }}
             key={uuidv4()}></div>
         </div>
-      </>
+      </div>
     );
   };
 
@@ -84,11 +87,13 @@ export default class Homepage extends React.Component<IProps, IState> {
         <div className="homepage__control">
           <select onChange={this.handleSelect}>
             {bars.map((item, index) => (
-              <option value={index}>#progress {index}</option>
+              <option key={uuidv4()} value={index}>
+                #progress {index}
+              </option>
             ))}
           </select>
           {buttons.map((item, index) => (
-            <button className="homepage__button" onClick={e => this.handleClick(item)}>
+            <button key={uuidv4()} className="homepage__button" onClick={e => this.handleClick(item)}>
               {item}
             </button>
           ))}

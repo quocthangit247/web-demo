@@ -9,7 +9,12 @@
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start:tsx": "webpack-dev-server --mode development --color",
     "start": "concurrently \"yarn run watch-css\" \"yarn run start:tsx\"",
-    "build": "rimraf dist && yarn run build-css && webpack --config webpack.config.js --mode production"
+    "build": "rimraf dist && yarn run build-css && webpack --config webpack.config.js --mode production",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk --harmony node_modules/jest/bin/jest.js -i",
+    "cover": "npm run test -- --coverage",
+    "cover:view": "open ./coverage/lcov-report/index.html || start ./coverage/lcov-report/index.html"
   },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -29,15 +34,21 @@
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-react": "^7.7.4",
     "@babel/preset-typescript": "^7.7.7",
+    "@types/enzyme": "^3.10.4",
+    "@types/jest": "^24.0.24",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
     "@types/uuid": "^3.4.6",
     "autoprefixer": "^9.7.3",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "concurrently": "^5.0.2",
     "css-loader": "^3.4.0",
+    "enzyme": "^3.11.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.9.0",
+    "jest-cli": "^24.9.0",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.0",
     "postcss-loader": "^3.0.0",
@@ -54,6 +65,25 @@
     "typescript": "^3.7.3",
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-dev-server": "^3.10.1",
+    "enzyme-adapter-react-16":"^1.15.2"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/src/setup-test/test-shim.js",
+      "<rootDir>/src/setup-test/test-setup.js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/src/setup-test/test-preprocessor.js"
+    },
+    "testMatch": [
+      "**/__tests__/*.(ts|tsx|js)",
+      "<rootDir>/src/*.test.(ts|tsx|js)"
+    ]
   }
 }
