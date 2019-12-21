@@ -27,13 +27,28 @@ export default class Homepage extends React.Component<IProps, IState> {
   }
 
   renderBar = (index: number) => {
-    const { values = [] } = this.state;
+    const { values = [], limit } = this.state;
+    const value = values[index];
+    const percentage = (value / limit) * 100;
+    let width: number;
+    if (percentage > 0 && percentage <= 100) {
+      width = percentage;
+    }
+    if (percentage > 100) {
+      width = 100;
+    }
+    if (percentage <= 0) {
+      width = 0;
+    }
+
     return (
       <>
-        <div className={`homepage__progress`} key={uuidv4()}>
-          <div className="homepage__value"> {values[index]}</div>
-          <div className={`homepage__percentage`} style={{ width: `${values[index]}%` }} key={uuidv4()}></div>
-          {/* <div className={`homepage__percentage-${index}`} key={uuidv4()} /> */}
+        <div className="homepage__progress" key={uuidv4()}>
+          <div className="homepage__value"> {value}</div>
+          <div
+            className={`homepage__percentage ${value > limit && 'homepage__warning'}`}
+            style={{ width: `${width}%` }}
+            key={uuidv4()}></div>
         </div>
       </>
     );
@@ -41,10 +56,11 @@ export default class Homepage extends React.Component<IProps, IState> {
 
   handleClick = (item: number) => {
     const { selected, values } = this.state;
+    const value = values[selected] + item;
     if (values[selected] >= 0) {
       values[selected] += item;
     }
-    if (values[selected] === 0 && item < 0) {
+    if (value < 0 && item < 0) {
       values[selected] = 0;
     }
     this.setState({
@@ -60,8 +76,7 @@ export default class Homepage extends React.Component<IProps, IState> {
   };
 
   public render() {
-    console.log('>>>>>>>>>>>>', this.state);
-    const { bars = [], buttons = [], limit = 0 } = this.state;
+    const { bars = [], buttons = [] } = this.state;
     return (
       <section className="homepage">
         <h1 className="homepage__text">Progress Bars</h1>

@@ -13,7 +13,7 @@
   }
 
   &__percentage {
-    width: 10%;
+    width: 0%;
     height: 45px;
     background-color: green;
   }
@@ -21,6 +21,16 @@
   &__control {
     width: 50%;
     margin: 0 auto;
+    select {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 45%;
+      margin: 3px;
+    }
+    @include desktop {
+    }
   }
 
   &__button {
@@ -32,5 +42,9 @@
     position: absolute;
     left: 50%;
     top: 30%;
+  }
+
+  &__warning {
+    background-color: red;
   }
 }

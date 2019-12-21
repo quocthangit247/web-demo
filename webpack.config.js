@@ -7,7 +7,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
 });
 
 module.exports = {
-  watch: true,
+  watch: false,
   entry: './src/index.tsx',
   output: {
     path: path.join(__dirname, 'public'),
@@ -20,6 +20,10 @@ module.exports = {
   module: {
     rules: [
       { test: /\.scss$/, exclude: /node_modules/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+      {
+        test: /\.css$/, exclude: /node_modules/,
+        use: ['style-loader', 'css-loader', "postcss-loader"]
+      },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'ts-loader' },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
