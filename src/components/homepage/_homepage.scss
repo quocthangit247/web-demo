@@ -30,6 +30,14 @@
       margin: 3px;
     }
     @include desktop {
+      select {
+        width: 15%;
+        margin-bottom: 10px;
+      }
+      button {
+        width: 15%;
+        margin: 3px;
+      }
     }
   }
 

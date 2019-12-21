@@ -6,32 +6,57 @@ const htmlPlugin = new HtmlWebPackPlugin({
   filename: './index.html',
 });
 
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+// Extract CSS
+const extractCSS = new ExtractTextPlugin("style", "css", "less", "sass", "scss")
+
 module.exports = {
+  devtool: "source-map",
   watch: false,
   entry: './src/index.tsx',
   output: {
-    path: path.join(__dirname, 'public'),
+    // sourceMapFilename: '[file].map',
+    path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
-  devtool: 'source-map',
   module: {
     rules: [
-      { test: /\.scss$/, exclude: /node_modules/, use: ['style-loader', 'css-loader', 'sass-loader'] },
       {
         test: /\.css$/, exclude: /node_modules/,
-        use: ['style-loader', 'css-loader', "postcss-loader"]
+        use: extractCSS.extract([
+          'css-loader',
+          'postcss-loader'
+        ])
       },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'ts-loader' },
+      {
+        test: /\.s?css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
+      },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
     ],
   },
-  // devServer: {
-  //   contentBase: path.join(__dirname, 'public'),
-  // },
+  plugins: [
+    htmlPlugin,
+    extractCSS,
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    }),
+    new ExtractTextPlugin("[name].min.css", {
+      allChunks: true
+    })],
   devServer: {
     inline: true,
     open: true,
@@ -45,5 +70,20 @@ module.exports = {
     },
     compress: true,
   },
-  plugins: [htmlPlugin],
-};
+  optimization: {
+    minimize: true,
+    // minify js
+    minimizer: [new TerserPlugin({
+      parallel: true,
+      terserOptions: {
+        output: {
+          comments: false,
+        },
+      },
+      extractComments: false,
+    })],
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
+}
