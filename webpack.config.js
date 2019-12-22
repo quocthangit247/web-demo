@@ -1,25 +1,21 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: './src/index.html',
   filename: './index.html',
 });
 
-const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-
 // Extract CSS
-const extractCSS = new ExtractTextPlugin('style', 'css', 'less', 'sass', 'scss');
+const extractCSS = new ExtractTextPlugin('index.css');
 
 module.exports = {
-  // devtool: 'source-map',
-  watch: false,
   entry: './src/index.tsx',
   output: {
-    // sourceMapFilename: '[file].map',
     path: path.join(__dirname, 'dist'),
     filename: '[name].[hash].js',
   },
@@ -28,11 +24,6 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: extractCSS.extract(['css-loader', 'postcss-loader']),
-      },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'ts-loader' },
       {
@@ -48,21 +39,14 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: extractCSS.extract(['css-loader', 'postcss-loader']),
+      },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
     ],
   },
-  plugins: [
-    htmlPlugin,
-    extractCSS,
-    new MiniCssExtractPlugin({
-      filename: '[name].[hash].css',
-      chunkFilename: '[id].[hash].css',
-    }),
-    new ExtractTextPlugin('[name].min.css', {
-      allChunks: true,
-    }),
-    new OptimizeCSSAssetsPlugin({}),
-  ],
   devServer: {
     inline: true,
     open: true,
@@ -78,7 +62,6 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    // minify js
     minimizer: [
       new TerserPlugin({
         parallel: true,
@@ -87,11 +70,32 @@ module.exports = {
             comments: false,
           },
         },
+        sourceMap: true,
+        cache: true,
         extractComments: false,
+      }),
+      new OptimizeCSSAssetsPlugin({
+        assetNameRegExp: /\.optimize\.css$/g,
+        cssProcessor: require('cssnano'),
+        cssProcessorPluginOptions: {
+          preset: ['default', { discardComments: { removeAll: true } }],
+        },
+        canPrint: true,
       }),
     ],
     splitChunks: {
       chunks: 'all',
     },
   },
+  plugins: [
+    htmlPlugin,
+    extractCSS,
+    new MiniCssExtractPlugin({
+      filename: '[name].[hash].min.css',
+      chunkFilename: '[id].[hash].min.css',
+    }),
+    new ExtractTextPlugin('[name].min.css', {
+      allChunks: true,
+    }),
+  ],
 };
