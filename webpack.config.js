@@ -8,19 +8,20 @@ const htmlPlugin = new HtmlWebPackPlugin({
 
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 // Extract CSS
-const extractCSS = new ExtractTextPlugin("style", "css", "less", "sass", "scss")
+const extractCSS = new ExtractTextPlugin('style', 'css', 'less', 'sass', 'scss');
 
 module.exports = {
-  devtool: "source-map",
+  // devtool: 'source-map',
   watch: false,
   entry: './src/index.tsx',
   output: {
     // sourceMapFilename: '[file].map',
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].[hash].js',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -28,21 +29,24 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/, exclude: /node_modules/,
-        use: extractCSS.extract([
-          'css-loader',
-          'postcss-loader'
-        ])
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: extractCSS.extract(['css-loader', 'postcss-loader']),
       },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.tsx?$/, exclude: /node_modules/, loader: 'ts-loader' },
       {
         test: /\.s?css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: 'dist/css',
+            },
+          },
           'css-loader',
-          'sass-loader'
-        ]
+          'sass-loader',
+        ],
       },
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
     ],
@@ -51,12 +55,14 @@ module.exports = {
     htmlPlugin,
     extractCSS,
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
+      filename: '[name].[hash].css',
+      chunkFilename: '[id].[hash].css',
     }),
-    new ExtractTextPlugin("[name].min.css", {
-      allChunks: true
-    })],
+    new ExtractTextPlugin('[name].min.css', {
+      allChunks: true,
+    }),
+    new OptimizeCSSAssetsPlugin({}),
+  ],
   devServer: {
     inline: true,
     open: true,
@@ -73,17 +79,19 @@ module.exports = {
   optimization: {
     minimize: true,
     // minify js
-    minimizer: [new TerserPlugin({
-      parallel: true,
-      terserOptions: {
-        output: {
-          comments: false,
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: {
+          output: {
+            comments: false,
+          },
         },
-      },
-      extractComments: false,
-    })],
+        extractComments: false,
+      }),
+    ],
     splitChunks: {
-      chunks: 'all'
-    }
-  }
-}
+      chunks: 'all',
+    },
+  },
+};
